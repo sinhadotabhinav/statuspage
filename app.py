@@ -6,6 +6,7 @@ from datetime import datetime
 from datetime import timedelta
 
 app = Flask(__name__)
+date_range_days = 90
 
 # read custom applications.json
 with open("./applications.json", "r", encoding="UTF-8") as applications:
@@ -33,6 +34,7 @@ def build_status():
         for obj in uptime_status_json["statuses"]:
             if app_item.get("name") == obj.get("name"):
                 app_item["status"] = obj.get("status")
+                app_item["uptime_percent"] = obj.get("uptime_percent")
         app_item["last_status"] = fetch_uptime_status(app_item.get("url"))
     return applications_json
 
@@ -69,19 +71,20 @@ def home():
     last_updated_timestamp = datetime.strptime(get_last_updated(), "%Y-%m-%d %H:%M:%S")
     current_time = datetime.now()
     time_difference = current_time - last_updated_timestamp
-    hours_difference = int(time_difference.total_seconds() / 3600)
+    hours_difference = time_difference.total_seconds() / 3600
 
-    if hours_difference > 24:
-        last_updated = f"{hours_difference} hours ago"
+    if hours_difference > 1:
+        last_updated = f"{int(hours_difference)} hours ago"
     else:
-        last_updated = f"{hours_difference * 60} minutes ago"
+        last_updated = f"{int(hours_difference * 60)} minutes ago"
     
     return render_template(
         'index.html',
         app_list=status_list,
         last_updated=last_updated,
         overall_status=overall_status,
-        date_range=get_date_range(90))
+        date_range=get_date_range(date_range_days),
+        date_range_days=date_range_days)
 
 # initialize application
 if __name__ == '__main__':

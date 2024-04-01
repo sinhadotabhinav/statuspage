@@ -16,7 +16,7 @@
                 Welcome to software status page hub.
             </div>
             <div class="welcome-message-detail">
-                Below you'll find status information for all software tools and services.
+                Below you will find status information for all software tools and services.
             </div>
         </div>
 
@@ -39,9 +39,9 @@
                     {% endfor %}
                 </div>
                 <div class="labels-container">
-                    <div class="label">90 days ago</div>
+                    <div class="label">{{ date_range_days }} days ago</div>
                     <div class="spacer"></div>
-                    <div class="label">{{ ninetyDayUptimePercent }}% uptime</div>
+                    <div class="label">{{ app['uptime_percent'] }}% uptime</div>
                     <div class="spacer"></div>
                     <div class="label">Today</div>
                 </div>
