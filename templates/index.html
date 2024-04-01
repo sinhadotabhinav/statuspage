@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" href="https://manatal-backend-public-assets.s3.amazonaws.com/media/career_portal_logo_direct_upload/948f49f9-7b0a-4d00-a178-60bccd67ca6d_Thunder%20Logo.png">
+</head>
+<body>
+    <div class="big-container">
+
+        <div class="welcome-container">
+            <div class="welcome-message">
+                Welcome to software status page hub.
+            </div>
+            <div class="welcome-message-detail">
+                Below you'll find status information for all software tools and services.
+            </div>
+        </div>
+
+        <div class="status-container">
+            <span class="status-message">All Systems Operational</span>
+            <span class="status-last-updated">moments ago</span>
+        </div>
+
+        {% for app in app_list %}
+            {% set outer_loop = loop %}
+            <div class="container">
+                <div class="header-container">
+                    <h2><a href="{{ app['url'] }}" target="_blank">{{ app['name'] }}</a><i id="tooltip-{{ outer_loop.index }}" class="fa-regular fa-circle-question fa-2xs icon-tooltip"></i><span class="tooltip-popup" id="tooltip-popup-{{ outer_loop.index }}">{{ app['description'] }}</span></h2>
+                    <div id="container-{{ outer_loop.index }}-status" class="status"></div>
+                </div>
+                <div class="bars-container">
+                    {% for _ in range(90) %}
+                        <div id="container-{{ outer_loop.index }}-bar-{{ loop.index }}" class="bar"></div>
+                        <div id="container-{{ outer_loop.index }}-popup-{{ loop.index }}" class="popup-box"></div>
+                    {% endfor %}
+                </div>
+                <div class="labels-container">
+                    <div class="label">90 days ago</div>
+                    <div class="spacer"></div>
+                    <div class="label">{{ ninetyDayUptimePercent }}% uptime</div>
+                    <div class="spacer"></div>
+                    <div class="label">Today</div>
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+
+    <script>
+        var appList = {{ app_list | tojson }};
+    </script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
+</body>
+</html>

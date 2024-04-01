@@ -1,0 +1,17 @@
+[
+    {
+        "name": "Bitbucket",
+        "description": "Source code management tool.",
+        "url": "http://google.com"
+    },
+    {
+        "name": "Confluence",
+        "description": "Documentation management tool.",
+        "url": "https://google.com"
+    },
+    {
+        "name": "Jira",
+        "description": "Issue management tool.",
+        "url": "https://google.com"
+    }
+]
