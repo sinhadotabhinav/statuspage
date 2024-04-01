@@ -90,10 +90,8 @@ $(document).ready(function() {
         let tooltipPopupId = tooltipId.replace('tooltip', 'tooltip-popup')
         $(this).hover(function() {
             $(`#${tooltipPopupId}`).toggleClass('show')
-            console.log('hovered')
         }, function() {
             $(`#${tooltipPopupId}`).removeClass('show')
-            console.log('unhovered')
         })
     })
 })

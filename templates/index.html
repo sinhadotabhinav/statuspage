@@ -21,8 +21,8 @@
         </div>
 
         <div class="status-container">
-            <span class="status-message">All Systems Operational</span>
-            <span class="status-last-updated">moments ago</span>
+            <span class="status-message">{{ overall_status }}</span>
+            <span class="status-last-updated">last updated: {{ last_updated }}</span>
         </div>
 
         {% for app in app_list %}
@@ -51,7 +51,7 @@
     </div>
 
     <script>
-        var appList = {{ app_list | tojson }};
+        var appList = {{ app_list | tojson | safe }};
     </script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="{{ url_for('static', filename='index.js') }}"></script>

@@ -30,7 +30,7 @@ def fetch_uptime_status(url):
 def build_status():
     ''' build status array for webui. '''
     for app_item in applications_json:
-        for obj in uptime_status_json:
+        for obj in uptime_status_json["statuses"]:
             if app_item.get("name") == obj.get("name"):
                 app_item["status"] = obj.get("status")
         app_item["last_status"] = fetch_uptime_status(app_item.get("url"))
@@ -43,6 +43,10 @@ def is_overall_active(status_list):
             return False
     return True
 
+def get_last_updated():
+    ''' get last updated timestamp in uptime josn. '''
+    return uptime_status_json["last_updated"] if uptime_status_json["last_updated"] is not None else None
+
 def get_date_range(num):
     ''' custom date fetcher function . '''
     date_range = []
@@ -54,12 +58,29 @@ def get_date_range(num):
 @app.route('/')
 def home():
     ''' home endpoint. '''
+
     status_list = build_status()
-    overall_active = is_overall_active(status_list)
+
+    if is_overall_active(status_list):
+        overall_status = "All systems are operational"
+    else:
+        overall_status = "Some systems have outages"
+
+    last_updated_timestamp = datetime.strptime(get_last_updated(), "%Y-%m-%d %H:%M:%S")
+    current_time = datetime.now()
+    time_difference = current_time - last_updated_timestamp
+    hours_difference = int(time_difference.total_seconds() / 3600)
+
+    if hours_difference > 24:
+        last_updated = f"{hours_difference} hours ago"
+    else:
+        last_updated = f"{hours_difference * 60} minutes ago"
+    
     return render_template(
         'index.html',
         app_list=status_list,
-        overall_active=overall_active,
+        last_updated=last_updated,
+        overall_status=overall_status,
         date_range=get_date_range(90))
 
 # initialize application
